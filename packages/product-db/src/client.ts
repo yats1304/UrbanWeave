@@ -14,3 +14,12 @@ export const prisma =
   });
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+
+prisma
+  .$connect()
+  .then(() => {
+    console.log("Connected to the Product DB (Postgres)");
+  })
+  .catch((e) => {
+    console.log(e);
+  });

@@ -1,6 +1,8 @@
 import { clerkPlugin, getAuth } from "@clerk/fastify";
 import Fastify from "fastify";
 import { isAuthenticated } from "./middleware/authMiddleware.js";
+import { connectOrderDb } from "@repo/order-db";
+import { orderRoutes } from "./routes/order.route.js";
 
 const fastify = Fastify();
 
@@ -20,6 +22,13 @@ fastify.get("/test", { preHandler: isAuthenticated }, (request, reply) => {
     userId: request.userId,
   });
 });
+
+fastify.register(orderRoutes);
+
+const connectDb = async () => {
+  await connectOrderDb();
+};
+connectDb();
 
 fastify.listen({ port: 8001 }, (err, address) => {
   if (err) {
